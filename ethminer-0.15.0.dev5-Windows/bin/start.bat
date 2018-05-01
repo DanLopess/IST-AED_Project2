@@ -1,0 +1,1 @@
+ethminer.exe -G -F http://eth-eu.dwarfpool.com/0x5CdAdD97f262FC5eFC507Efc0bbffe231Dcd65C5/GTX1060/daniellopesguerra@gmail.com
