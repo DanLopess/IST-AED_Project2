@@ -1,6 +1,6 @@
 /************
 *************
-April 25th '18
+May 8th '18
 
 All Rights Reserved © Daniel Lopes
 
@@ -37,6 +37,15 @@ void exit();
 
 /* Main Function */
 int main(){
+
+  link controller;
+  controller->head = NULL;
+  controller->tail = NULL;
+
+  head = createNode();
+  head = addNode();
+  head->next = novo;
+  novo->
 
 
 
