@@ -15,6 +15,7 @@ Notes:
 - Utilizar abstracao de modo a que independentemente da implementacao
 consiga alterar o tipo de dados mas que as funcoes basicas (insert delete, etc)
 funcionem na mesma
+- Maybe hash table
 *************/
 
 #include <stdio.h>
