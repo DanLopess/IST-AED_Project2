@@ -11,15 +11,18 @@ Description:
 This heather file contains all of the structures
 and functions' Prototypes of the data structure of type list
 *************/
+#ifndef LIST_H
+#define LIST_H
 
 typedef struct node{
- Task task;
+ Item task;
  struct node *next;
 } *link;
 
+link newNode(Item i);
+int repeatingNode(link Head, link Node); /*Checks if node already exists - maybe use hash table*/
+void addNode(link Head, link Node); /*to decide: beginning or the end*/
+void removeNode(link Head, Item i);
+void printList(link Head);
 
-
-link insertBegin(link head, int a);
-link insertEnd(link head, int value);
-void printList(link head);
-int i
+#endif

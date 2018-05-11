@@ -16,15 +16,19 @@ Notes:
 consiga alterar o tipo de dados mas que as funcoes basicas (insert delete, etc)
 funcionem na mesma
 - Maybe hash table
+- Usar head e tail, introduzir elemento sempre no fim da lista
+- head aponta para o inicio e tail aponta para o fim
+o que impede que tenha de percorrer a lista toda
 *************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include <ctype.h>
+#include "list.h"
+#include "task.h"
 
 /* Pre-processed constants and structures*/
+#define MAXCOMMAND 10 /*Command won't be bigger than 10 chars*/
 
 /* Function Declaration/Prototype */
 void add();
@@ -38,17 +42,12 @@ void exit();
 
 /* Main Function */
 int main(){
+  int quitProgram = 0;
+  char *command;
 
-  link controller;
-  controller->head = NULL;
-  controller->tail = NULL;
-
-  head = createNode();
-  head = addNode();
-  head->next = novo;
-  novo->
-
-
+  do{
+    scanf("%s*[" "]", command);
+  } while(quitProgram == 0);
 
   return 0;
 }

@@ -11,6 +11,27 @@ Description:
 This auxiliary file contains all the implementations
 of the functions in the data structure of type list
 *************/
+#include "task.h"
+#include "list.h"
+
+link newNode(Item i){
+  link node;
+  node->task = i;
+  node->next = NULL;
+  return node;
+}
+
+int repeatingNode(link head, link newElement); /*Checks if node already exists - maybe use hash table*/
+
+void addNode(link head, link newElement){ /*add newElement (type node) to decide: beginning or the end*/
+
+}
+
+void removeNode(link head, link node){
+
+
+}
+void printList(link head);
 
 link insertBegin(link head, int a)
 {
