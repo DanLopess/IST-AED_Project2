@@ -33,21 +33,17 @@ link newNode(Item i, link next) {
 	return x;
 }
 
-void addNode(List x, Item i) { /*Adds a node to a certain list*/
-	link head = x->head;
-	link tail = x->tail;
-	link node = newNode(i, head);
+void addNode(List x, link node) { /*Adds a node to a certain list*/
 	if (listEmpty(x)) {
-		head = (tail = node);
-		free(node);
+		x->head = node;
+		x->tail = node;
 		return;
 	}
-	tail->next = node;
-	tail = tail->next;
-	free(node);
+	x->tail->next = node;
+	x->tail = x->tail->next;
 }
 
-int repeatingNode(List x, link node){ /*Substitute for hash table*/
+int existantNode(List x, link node){ /*Substitute for hash table*/
 	link i;
 	for (i = x->head; i != NULL; i = i->next)
 		if (i == node){
@@ -65,30 +61,42 @@ Item getFirstElement(List x) { /*Removes first element of list and returns it*/
 	return item;
 }
 
-void removeNode(List x, link node){
-	link i, aux;
-	for (i = x->head; i != NULL; i = i->next)
-		if (i->next == node){
-			aux = i->next;
-			i->next = aux->next;
-			free(aux);
-		}
+void removeNode(List x, link node){ /* Finish remove */
+	link i;
+	if (node == x->head){ /*If node is the first one, need to change head*/
+		x->head = x->head->next;
+		free(node);
+	}
+	else{
+		for (i = x->head; i != NULL; i = i->next)
+			if (i->next == node){
+					if(node == x->tail){ /*If node is the last one, need to change tail*/
+						i->next = NULL;
+						x->tail = i;
+					}
+					else{
+						i->next = node->next;
+					}
+					free(node);
+					break;
+			}
+	}
 }
 
 void printList(List x)
 {
 	link t;
-	int i=0;
+	int i=1;
 	if (listEmpty(x)){
-		printf("Empty List");
+		printf("Empty List\n");
 	}
 	else{
 		for(t = x->head; t != NULL; t = t->next){
 			printf("Node %d:\n", i); i++;
-			/*printTask(t->item);*/
+			/*printTask(t->item); PLACE IN PRINTTASK*/
 			printf("ID = %ld\n",t->item.id);
-			printf("Description = %s", t->item.description);
-			printf("Duration = %ld", t->item.duration);
+			printf("Description = %s\n", t->item.description);
+			printf("Duration = %ld\n", t->item.duration);
 		}
 	}
 }

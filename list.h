@@ -26,7 +26,7 @@ List listInit(List x);
 int listEmpty(List x);
 link newNode(Item i, link next);
 int repeatingNode(List x, link node); /*Checks if node already exists - maybe use hash table*/
-void addNode(List x, Item i); /* add to end, use head and tail*/
+void addNode(List x, link node); /* add to end, use head and tail*/
 Item getFirstElement(List x);
 void removeNode(List x, link node);
 void printList(List x);

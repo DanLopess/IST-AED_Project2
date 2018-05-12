@@ -12,15 +12,9 @@ Known Bugs:
 Notes:
 - Comentarios das funcoes fora das funcoes
 - Quando utilizo uma funcao para algo, se é parecido, tentar converter numa
-- Implementacoes da estrutura de dados em dados.c
-- Prototipos e structs dessas estruturas de dados em dados.h
-- Utilizar abstracao de modo a que independentemente da implementacao
-consiga alterar o tipo de dados mas que as funcoes basicas (insert delete, etc)
-funcionem na mesma
-- Maybe hash table
-- Usar head e tail, introduzir elemento sempre no fim da lista
-- head aponta para o inicio e tail aponta para o fim
-o que impede que tenha de percorrer a lista toda
+- usar hash table
+- resolver problema de ter tipo List em task.h
+- list.c esta abstrato funciona sempre com tipo Item
 *************/
 
 #include <stdio.h>
@@ -41,16 +35,35 @@ int main(){
 		scanf("%s*[" "]", command);
 	} while(quitProgram == 0);*/
 
-	List a;
-	Item task ;
-	a = (List) malloc(sizeof(struct list)); /*Creates a new list*/
+	List a; /*Contains head and tail*/
+	Item task1, task2, task3;
+	a = (List) malloc(sizeof(struct list)); /*Creates a list (head and tail)*/
 	listInit(a);
-	task.id = 123;
-	strcpy(task.description, "ola tudo bem");
-	task.duration = 23;
-	addNode(a,task);
+	task1.id = 123;
+	strcpy(task1.description, "ola tudo bem");
+	task1.duration = 23;
+	link node1 = newNode(task1, NULL); /*Allocs memory*/
+	addNode(a,node1);
+	task2.id = 456;
+	strcpy(task2.description, "sup");
+	task2.duration = 114;
+	link node2 = newNode(task2, NULL); /*Allocs memory*/
+	addNode(a,node2);
+	task3.id = 90240525245;
+	strcpy(task3.description, "ehehehehehehhehehe");
+	task3.duration = 242424121446426;
+	link node3 = newNode(task3, NULL); /*Allocs memory*/
+	addNode(a,node3);
 	printList(a);
+	removeNode(a, node3);
+	link node4 = newNode(task2, NULL); /*Allocs memory*/
+	addNode(a,node4);
+	printList(a);
+	free(node1);
+	free(node2);
+	free(node4);
 	free(a);
+
 
 	return 0;
 }
