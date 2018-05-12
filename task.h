@@ -11,15 +11,15 @@ Description:
 This auxiliary file contains all the declarations
 and structures related to tasks
 *************/
-#ifndef HASH_H
-#define HASH_H
+#ifndef TASK_H
+#define TASK_H
 #define MAXDESCRIPTION 8000
 
 typedef struct{
   unsigned long int id;
   char description[MAXDESCRIPTION+1];
   unsigned long int duration, early, late;
-  link dependencies;
+  link dependencies; /*Pointer to list of dependencies*/
 } Task;
 
 typedef Task Item;

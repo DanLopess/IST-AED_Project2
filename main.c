@@ -10,6 +10,8 @@ Project: Tasks management
 Known Bugs:
 -
 Notes:
+- Comentarios das funcoes fora das funcoes
+- Quando utilizo uma funcao para algo, se é parecido, tentar converter numa
 - Implementacoes da estrutura de dados em dados.c
 - Prototipos e structs dessas estruturas de dados em dados.h
 - Utilizar abstracao de modo a que independentemente da implementacao
