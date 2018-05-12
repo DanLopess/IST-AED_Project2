@@ -41,13 +41,16 @@ int main(){
 		scanf("%s*[" "]", command);
 	} while(quitProgram == 0);*/
 
-	List a = listInit();
-	Item task;
+	List a;
+	Item task ;
+	a = (List) malloc(sizeof(struct list)); /*Creates a new list*/
+	listInit(a);
 	task.id = 123;
 	strcpy(task.description, "ola tudo bem");
 	task.duration = 23;
 	addNode(a,task);
 	printList(a);
+	free(a);
 
 	return 0;
 }

@@ -17,11 +17,9 @@ of FIFO ADTs
 #include <string.h>
 #include "list.h"
 
-List listInit() {
-	List x;
+List listInit(List x) {
 	x->head = NULL;
 	x->tail = NULL;
-	return x;
 }
 
 int listEmpty(List x) { /*Checks if list is empty*/
@@ -38,12 +36,15 @@ link newNode(Item i, link next) {
 void addNode(List x, Item i) { /*Adds a node to a certain list*/
 	link head = x->head;
 	link tail = x->tail;
+	link node = newNode(i, head);
 	if (listEmpty(x)) {
-		head = (tail = newNode(i, head));
+		head = (tail = node);
+		free(node);
 		return;
 	}
-	tail->next = newNode(i, tail->next);
+	tail->next = node;
 	tail = tail->next;
+	free(node);
 }
 
 int repeatingNode(List x, link node){ /*Substitute for hash table*/
@@ -78,10 +79,16 @@ void printList(List x)
 {
 	link t;
 	int i=0;
-	for(t = x->head; t != NULL; t = t->next){
-		printf("Node %d:\n", i); i++;
-		printf("ID = %ld\n",t->item.id);
-		printf("Description = %s", t->item.description);
-		printf("Duration = %ld", t->item.duration);
+	if (listEmpty(x)){
+		printf("Empty List");
+	}
+	else{
+		for(t = x->head; t != NULL; t = t->next){
+			printf("Node %d:\n", i); i++;
+			/*printTask(t->item);*/
+			printf("ID = %ld\n",t->item.id);
+			printf("Description = %s", t->item.description);
+			printf("Duration = %ld", t->item.duration);
+		}
 	}
 }
