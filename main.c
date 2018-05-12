@@ -32,26 +32,24 @@ o que impede que tenha de percorrer a lista toda
 /* Pre-processed constants and structures*/
 #define MAXCOMMAND 10 /*Command won't be bigger than 10 chars*/
 
-/* Function Declaration/Prototype */
-void add();
-void duration();
-void depend();
-void removes();
-void path();
-void exit();
-
-/* Global Variables */
-
 /* Main Function */
 int main(){
-  int quitProgram = 0;
-  char *command;
+	/*int quitProgram = 0;
+	char *command;
 
-  do{
-    scanf("%s*[" "]", command);
-  } while(quitProgram == 0);
+	do{
+		scanf("%s*[" "]", command);
+	} while(quitProgram == 0);*/
 
-  return 0;
+	List a = listInit();
+	Item task;
+	task.id = 123;
+	strcpy(task.description, "ola tudo bem");
+	task.duration = 23;
+	addNode(a,task);
+	printList(a);
+
+	return 0;
 }
 
 /* Function Implementation */

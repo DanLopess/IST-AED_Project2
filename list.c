@@ -1,62 +1,87 @@
 /************
 *************
-May 8th '18
+May 12th '18
 
 All Rights Reserved © Daniel Lopes
 
-File: data.c
+File: list.c
 Project: Tasks management
 *************
 Description:
 This auxiliary file contains all the implementations
-of the functions in the data structure of type list
+of the functions in the data structure of type list with the help
+of FIFO ADTs
 *************/
-#include "task.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "list.h"
 
-link newNode(Item i){
-  link node;
-  node->task = i;
-  node->next = NULL;
-  return node;
+List listInit() {
+	List x;
+	x->head = NULL;
+	x->tail = NULL;
+	return x;
 }
 
-int repeatingNode(link head, link newElement); /*Checks if node already exists - maybe use hash table*/
-
-void addNode(link head, link newElement){ /*add newElement (type node) to decide: beginning or the end*/
-
+int listEmpty(List x) { /*Checks if list is empty*/
+	return x->head == NULL;
 }
 
-void removeNode(link head, link node){
-
-
+link newNode(Item i, link next) {
+	link x = (link) malloc(sizeof(struct node));
+	x->item = i;
+	x->next = next;
+	return x;
 }
-void printList(link head);
 
-link insertBegin(link head, int a)
+void addNode(List x, Item i) { /*Adds a node to a certain list*/
+	link head = x->head;
+	link tail = x->tail;
+	if (listEmpty(x)) {
+		head = (tail = newNode(i, head));
+		return;
+	}
+	tail->next = newNode(i, tail->next);
+	tail = tail->next;
+}
+
+int repeatingNode(List x, link node){ /*Substitute for hash table*/
+	link i;
+	for (i = x->head; i != NULL; i = i->next)
+		if (i == node){
+			return 1; /*Node already exists*/
+		}
+	return 0; /*Node non-existant*/
+}
+
+
+Item getFirstElement(List x) { /*Removes first element of list and returns it*/
+	Item item = x->head->item;
+	link t = x->head->next;
+	free(x->head);
+	x->head = t;
+	return item;
+}
+
+void removeNode(List x, link node){
+	link i, aux;
+	for (i = x->head; i != NULL; i = i->next)
+		if (i->next == node){
+			aux = i->next;
+			i->next = aux->next;
+			free(aux);
+		}
+}
+
+void printList(List x)
 {
-link new = (link)malloc(sizeof(struct node));
-new->value = a;
-new->next = head;
-return new;
-}
-
-link insertEnd(link head, int value)
-{
- link t;
- link new = (link)malloc(sizeof(struct node));
- new->value = value;
- new->next = NULL;
- if(head == NULL) return new;
- for(t = head; t->next != NULL; t = t->next)
-;
- t->next = new;
- return head;
-}
-
-void printList(link head)
-{
- link t;
- for(t = head; t != NULL; t = t->next)
- printf(“%d\n”,t->value);
+	link t;
+	int i=0;
+	for(t = x->head; t != NULL; t = t->next){
+		printf("Node %d:\n", i); i++;
+		printf("ID = %ld\n",t->item.id);
+		printf("Description = %s", t->item.description);
+		printf("Duration = %ld", t->item.duration);
+	}
 }

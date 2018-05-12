@@ -16,30 +16,20 @@ and structures related to tasks
 #define MAXDESCRIPTION 8000
 
 typedef struct{
-  unsigned long int id;
-  char description[MAXDESCRIPTION+1];
-  unsigned long int duration, early, late;
-  link dependencies; /*Pointer to list of dependencies*/
-} Task;
+	unsigned long int id;
+	char description[MAXDESCRIPTION+1];
+	unsigned long int duration, early, late;
+	/*List dependencies; Pointer to list of dependencies, head and tail of a list*/
+} Item; /*this Item is a Task*/
 
-typedef Task Item;
 
-/* Function Declaration/Prototype */
+/* Function Declaration/Prototype
 void createTask(Item task);
 void duration();
 void depend();
 void removes();
 void path();
 void exit();
+*/
 
 #endif
-/*
-NOTES:
-criar estrutura tarefa
-criar lista de tarefas
-criar lista de dependencias
-criar hashtable para encontrar rapidamente tarefas
-- max 1milh elementos
-- utilizar nrs primos
-- começar tabela com NULL
-*/
