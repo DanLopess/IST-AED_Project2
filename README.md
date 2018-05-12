@@ -1,6 +1,5 @@
 # TASKS MANAGEMENT
-### This project allows users to manage certain tasks that may or may not 
-### be interlinked and assesses duration and efficiency figures
+### This project allows users to manage certain tasks that may or may not be interlinked and assesses duration and efficiency figures
 
 ## -- V1.0 --
 This version is the very first version and it
