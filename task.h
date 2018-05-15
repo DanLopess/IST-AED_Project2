@@ -15,23 +15,26 @@ and structures related to tasks
 #define TASK_H
 #define MAXDESCRIPTION 8000
 
-#include "list.h"
+typedef struct list *List; /* *List is a struct list defined in list.h*/
 
-typedef struct{
+typedef struct task{
 	char description[MAXDESCRIPTION+1];
 	unsigned long int id,duration, early, late;
-	/*List dependencies; Pointer to list of dependencies, head and tail of a list*/
-} Item; /*this Item is a Task*/
+	List dependencies; /**/
+}*Item; /*this Item is a pointer to Task*/
 
+
+#include "list.h"
 
 /*Function Declaration/Prototype*/
-Item createTask(char *description, unsigned long int id, unsigned long int duration);
-void add(Item task, List x);
-void duration();
+link findNodeById(List x, unsigned long int id);
+void addTask(List x);
+void removeTask(List x);
+void printTask(Item task);
+
+void duration(List x);
 void depend();
 void removes();
 void path();
-void exit();
-
 
 #endif

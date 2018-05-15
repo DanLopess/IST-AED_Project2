@@ -14,21 +14,20 @@ and functions' Prototypes of the data structure of type list
 
 #ifndef LIST_H
 #define LIST_H
-#include "task.h"
 
 typedef struct node *link; /* link is a pointer to struct node */
-typedef struct list *List; /* *List is a struct list */
 
-struct node{ Item item; link next; };
-struct list { link head; link tail; };
+#include "task.h"
 
-List listInit(List x);
+struct node { void* item; link next; }; /*Receives a certain item*/
+struct list { link head; link tail; }; /*Type def of List is in task.h*/
+
+void listInit(List x);
 int listEmpty(List x);
-link newNode(Item i, link next);
-int repeatingNode(List x, link node); /*Checks if node already exists - maybe use hash table*/
+void deleteList(List x);
+link newNode(Item  i, link next);
+int repeatingNode(List x, link node); /*Checks if node already exists*/
 void addNode(List x, link node); /* add to end, use head and tail*/
-Item getFirstElement(List x);
 void removeNode(List x, link node);
-void printList(List x);
 
 #endif

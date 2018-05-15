@@ -1,31 +1,52 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "test2.h"
 
-link insertBegin(link head, Item a)
-{
-  link new = (link)malloc(sizeof(struct node));
-  new->value = a;
-  new->next = head;
-  return new;
+typedef unsigned long int ulInt;
+
+Item readTask(){ /*Reads a certain task without dependencies*/
+	char c;
+	Item task = (Item)malloc(sizeof(struct task));
+
+	scanf("%lu", &task->id);
+	if(nonExistant(task->id)){ /*nonExistant MUST be from hashTable*/
+		/*ADD HERE - id to hashtable*/
+		while((c=getchar())==' ');
+		if (c == '\"')
+			scanf ("%[^\"]%*c", task->description); /*reads descrp with spaces until " */
+		scanf("%lu", &task->duration);
+	}
+	else{
+		printf("id already exists");
+		free(task);
+		return NULL;
+	}
 }
 
-link insertEnd(link head, Item value)
-{
- link t;
- link new = (link) malloc(sizeof(struct node));
- new->value = value;
- new->next = NULL;
- if(head == NULL) return new;
- for(t = head; t->next != NULL; t = t->next);
- t->next = new;
- return head;
+void addTask(Item task, List x){
+	link node;
+	ulInt tempId;
+	task->dependencies = (List) malloc(sizeof(struct list));
+	/*---------------------Taking care of dependencies---------------------*/
+	while(scanf("%lu", &tempId) == 1){
+		if(!nonExistant(tempId)){
+			printf("no such task\n");
+			deleteList(task->dependencies);
+			free(task);
+			return;
+		}
+		addNode(task->dependencies,newNode(tempId, NULL));
+	}
+	/*---------------------------------------------------------------------*/
+	node = newNode(task,NULL);
+	addNode(x,node)
 }
 
-void printList(link head)
-{
- link t;
- for(t = head; t != NULL; t = t->next)
- printf("%s\n",t->value);
+int nonExistant(List x, unsigned long int id){
+	link i;
+	for(i = x->head; i != NULL; i = i->next)
+		if(i->item.id == id)
+			return 0;
+	return 1;
+
 }
+
+/*cada tarefa ira ter lista de ids das dependentes
+quando remover um node, remover tambem das dependentes das outras tasks*/
