@@ -21,7 +21,7 @@ typedef struct task{
 	char description[MAXDESCRIPTION+1];
 	unsigned long int id,duration, early, late;
 	List dependencies; /**/
-}*Item; /*this Item is a pointer to Task*/
+}*Task; /*this Task is a pointer to task */
 
 
 #include "list.h"
@@ -30,7 +30,7 @@ typedef struct task{
 link findNodeById(List x, unsigned long int id);
 void addTask(List x);
 void removeTask(List x);
-void printTask(Item task);
+void printTask(Task task);
 
 void duration(List x);
 void depend();

@@ -1,9 +1,9 @@
 
 typedef unsigned long int ulInt;
 
-Item readTask(){ /*Reads a certain task without dependencies*/
+Task readTask(){ /*Reads a certain task without dependencies*/
 	char c;
-	Item task = (Item)malloc(sizeof(struct task));
+	Task task = (Task)malloc(sizeof(struct task));
 
 	scanf("%lu", &task->id);
 	if(nonExistant(task->id)){ /*nonExistant MUST be from hashTable*/
@@ -20,21 +20,24 @@ Item readTask(){ /*Reads a certain task without dependencies*/
 	}
 }
 
-void addTask(Item task, List x){
+void addTask(Task task, List x){
 	link node;
 	ulInt tempId;
 	task->dependencies = (List) malloc(sizeof(struct list));
 	/*---------------------Taking care of dependencies---------------------*/
-	while(scanf("%lu", &tempId) == 1){
+	while(scanf("%lu", tempId[0]) == 1){
 		if(!nonExistant(tempId)){
 			printf("no such task\n");
 			deleteList(task->dependencies);
+			free(tempId);
 			free(task);
 			return;
 		}
+		free(tempId);
 		addNode(task->dependencies,newNode(tempId, NULL));
 	}
 	/*---------------------------------------------------------------------*/
+	free(tempId);
 	node = newNode(task,NULL);
 	addNode(x,node)
 }

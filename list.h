@@ -25,7 +25,7 @@ struct list { link head; link tail; }; /*Type def of List is in task.h*/
 void listInit(List x);
 int listEmpty(List x);
 void deleteList(List x);
-link newNode(Item  i, link next);
+link newNode(void* i, link next);
 int repeatingNode(List x, link node); /*Checks if node already exists*/
 void addNode(List x, link node); /* add to end, use head and tail*/
 void removeNode(List x, link node);
