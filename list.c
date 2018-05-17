@@ -27,17 +27,29 @@ int listEmpty(List x) { /*Checks if list is empty*/
 	return x->head == NULL;
 }
 
-void deleteList(List x){
-	link t,a;
+void deleteList(List x){ /*doesn't completely free the list on purpose*/
 	if(!listEmpty(x)){
-		for(t = x->head; t->next != NULL; t = t->next){
-			a = t->next;
-			t->next = a->next;
-			free(a);
+		link t = x->head->next, next;
+		while (t != NULL && t != x->tail){
+			next = t->next;
+			free(t->item);
+			free(t);
+			t = next;
 		}
+		free(x->tail->item);
+		free(x->head->item);
+		x->head = NULL;
+		x->tail = NULL;
 	}
-	free(x->head);
-	free(x->tail);
+}
+
+void addNode(List x, void* item) {
+	if (listEmpty(x)) {
+		x->head = (x->tail = newNode(item, x->head));
+		return;
+	}
+	x->tail->next = newNode(item, x->tail->next);
+	x->tail = x->tail->next;
 }
 
 link newNode(void* i, link next) {
@@ -47,20 +59,10 @@ link newNode(void* i, link next) {
 	return x;
 }
 
-void addNode(List x, link node) { /*Adds a node to a certain list*/
-	if (listEmpty(x)) {
-		x->head = node;
-		x->tail = node;
-		return;
-	}
-	x->tail->next = node;
-	x->tail = x->tail->next;
-}
-
-void removeNode(List x, link node){ /* Finish remove */
+void removeNode(List x, link node){
 	link i;
 	if (node == x->head){ /*If node is the first one, need to change head*/
-		x->head = x->head->next;
+		x->head = node->next;
 		free(node);
 	}
 	else if(node == x->tail && node == x->head){

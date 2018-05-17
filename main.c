@@ -5,10 +5,13 @@ May 8th '18
 All Rights Reserved © Daniel Lopes
 
 File: main.c
-Project: Tasks management
+Project: Items management
 *************
 Known Bugs:
--
+- Add, falta 1 Free
+- Remove causa erro
+- duration está correto
+- fazer hash table
 Notes:
 - Comentarios das funcoes fora das funcoes
 - Quando utilizo uma funcao para algo, se é parecido, tentar converter tudo em uma
@@ -29,44 +32,47 @@ Notes:
 /* Function Declaration/Prototype */
 void executeCommand(char *command, List x);
 
+/*Global variables*/
+int criticalPathCalculated = 0; /*controls the status of the critical Path */
+
 /* Main Function */
 int main(){
-	int quitProgram = 0;
 	char command[MAXSIZE+1];
 	List a;
-	a = (List) malloc(sizeof(struct list)); /*Creates a list (head and tail)*/
+	a = (List) malloc(sizeof(struct list)); /*Creates a List (head and tail)*/
 	listInit(a);
-	do{
-		scanf("%10s*[' ']", command); /*Reads until a space is found and MAXCOMMAND*/
+
+	while(scanf("%10s*[' ']", command) == 1){
 		if(!strcmp(command,"exit"))
-			quitProgram = 1;
-		else{
+			break;
+		else
 			executeCommand(command, a);
-		}
-	} while(quitProgram == 0);
-	deleteList(a); /* Frees all the memory of the list*/
+	}
+	deleteAllTasks(a); /* Frees all the memory of the list*/
 	return 0;
 }
 
 /* Function Implementation */
 void executeCommand(char *command, List x){
+	/*char c;*/
 	if (!strcmp(command, "add")){
-		addTask(x);
+		addItem(readItem(x),x);
 	}
 	else if(!strcmp(command, "duration")){
 		duration(x);
 	}
 	else if(!strcmp(command, "depend")){
-
+		depend(x);
 	}
 	else if(!strcmp(command, "remove")){
-		removeTask(x);
+		removeItem(x);
 
 	}
 	else if(!strcmp(command, "path")){
-
+		path(x);
 	}
 	else{
-		printf("illegal arguments");
+		printf("illegal arguments\n");
 	}
+	/*while((c = getchar()) != '\n'); cleans buffer*/
 }
