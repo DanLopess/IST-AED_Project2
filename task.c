@@ -106,12 +106,11 @@ void addItem(Item task, List x){
 }
 
 /*
-*	Function: addItem
+*	Function: nonExistant
 *	--------------------
-*	reads the dependencies and adds them to the dependencies list and also adds
-*	the task to the main list
-*	input: List x which contains all of the tasks and an Item, i.e., task
-*	returns: nothing
+*	checks if an id exists in a certain list
+*	input: List x which contains all of the tasks and an id
+*	returns: an integer, either 0 (exists) or 1 (doesnt exist)
 */
 int nonExistant(List x, Key id){
 	link i;
@@ -123,11 +122,10 @@ int nonExistant(List x, Key id){
 }
 
 /*
-*	Function: addItem
+*	Function: removeItem
 *	--------------------
-*	reads the dependencies and adds them to the dependencies list and also adds
-*	the task to the main list
-*	input: List x which contains all of the tasks and an Item, i.e., task
+*	reads a certain id a removes it from the list
+*	input: List x which contains all of the tasks
 *	returns: nothing
 */
 void removeItem(List x){
@@ -164,11 +162,10 @@ void removeItem(List x){
 }
 
 /*
-*	Function: addItem
+*	Function: removeDependency
 *	--------------------
-*	reads the dependencies and adds them to the dependencies list and also adds
-*	the task to the main list
-*	input: List x which contains all of the tasks and an Item, i.e., task
+*	receives a list and an id and removes that id from all dependencies
+*	input: List x which contains all of the tasks and an id
 *	returns: nothing
 */
 void removeDependency(List x, Key id){ /*removes from all lists of dependencies*/
@@ -181,38 +178,42 @@ void removeDependency(List x, Key id){ /*removes from all lists of dependencies*
 }
 
 /*
-*	Function: addItem
+*	Function: printItem
 *	--------------------
-*	reads the dependencies and adds them to the dependencies list and also adds
-*	the task to the main list
-*	input: List x which contains all of the tasks and an Item, i.e., task
+*	prints a certain item
+*	input: Item , i.e., tasks
 *	returns: nothing
 */
 void printItem(Item t){
 	link i;
 
+	if(!criticalPathCalculated){
 	printf("%ld \"%s\" %ld",t->id, t->description, t->duration);
 	if(!listEmpty(t->dependencies))
 		for(i = t->dependencies->head; i != NULL; i = i->next){
 			printf(" %lu", *((Key*)i->item));
 		}
 	printf("\n");
+	}
+	else{
+		/*print with early and late*/
+	}
 }
 
 /*
-*	Function: addItem
+*	Function: duration
 *	--------------------
-*	reads the dependencies and adds them to the dependencies list and also adds
-*	the task to the main list
+*	based on a read value, which is a duration, prints out all the Tasks
+* that have equal or superior duration to the read duration
 *	input: List x which contains all of the tasks and an Item, i.e., task
 *	returns: nothing
 */
 void duration(List x){
 	Key duration;
 	link i;
-	int test = scanf("%lu*['\n']", &duration);
-
-	if(!criticalPathCalculated){
+	char c;
+	if((c = getchar()) == ' '){
+		int test = scanf("%lu", &duration);
 		if(test == 1 && duration > 0){
 				for(i = x->head; i != NULL; i = i->next){
 					if(((Item)i->item)->duration >= duration)
@@ -220,25 +221,22 @@ void duration(List x){
 				}
 		}
 		else{
-			if(test == 1 && duration < 0)
-				printf("illegal arguments");
-			else if(test == 0){
-				for(i = x->head; i != NULL; i = i->next)
-					printItem(i->item);
-			}
+			if(test == 1 && duration <= 0)
+				printf("illegal arguments\n");
 		}
 	}
-	else{
-		/*print early and start*/
-	}
+	else
+		for(i = x->head; i != NULL; i = i->next)
+			printItem(i->item);
 }
 
+
 /*
-*	Function: addItem
+*	Function: depend
 *	--------------------
-*	reads the dependencies and adds them to the dependencies list and also adds
-*	the task to the main list
-*	input: List x which contains all of the tasks and an Item, i.e., task
+*	prints out the input id of a certain task and all of the ids that
+*	are dependant of that task
+*	input: List x which contains all of the tasks
 *	returns: nothing
 */
 void depend(List x){
@@ -271,16 +269,14 @@ void depend(List x){
 	}
 	else{
 		printf("illegal arguments\n");
-		cleanBuffer();
 	}
 }
 
 /*
-*	Function: addItem
+*	Function: deleteAllTasks
 *	--------------------
-*	reads the dependencies and adds them to the dependencies list and also adds
-*	the task to the main list
-*	input: List x which contains all of the tasks and an Item, i.e., task
+*	deletes all of the allocated memory (dependencies, items and list of tasks)
+*	input: List x which contains all of the tasks
 *	returns: nothing
 */
 void deleteAllTasks(List x){ /*Delete list of tasks*/

@@ -39,8 +39,10 @@ int main(){
 	listInit(a);
 
 	while(scanf("%10s*['\n']", command) == 1){
-		if(!strcmp(command,"exit"))
+		if(!strcmp(command,"exit")){
+			cleanBuffer();
 			break;
+		}
 		else
 			executeCommand(command, a);
 	}
@@ -74,6 +76,5 @@ void executeCommand(char *command, List x){
 	}
 	else{
 		printf("illegal arguments\n");
-		cleanBuffer();
 	}
 }
