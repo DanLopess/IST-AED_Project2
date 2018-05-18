@@ -1,6 +1,6 @@
 /************
 *************
-May 8th '18
+May 18th '18
 
 All Rights Reserved © Daniel Lopes
 
@@ -8,15 +8,11 @@ File: main.c
 Project: Items management
 *************
 Known Bugs:
-- Add, falta 1 Free
-- Remove causa erro
-- duration está correto
-- fazer hash table
-Notes:
-- Comentarios das funcoes fora das funcoes
-- Quando utilizo uma funcao para algo, se é parecido, tentar converter tudo em uma
-- usar hash table
-- trocar existantID para hashtable
+- add done
+- duration done
+- depend done
+- remove not done
+- path not done
 
 *************/
 
@@ -42,7 +38,7 @@ int main(){
 	a = (List) malloc(sizeof(struct list)); /*Creates a List (head and tail)*/
 	listInit(a);
 
-	while(scanf("%10s*[' ']", command) == 1){
+	while(scanf("%10s*['\n']", command) == 1){
 		if(!strcmp(command,"exit"))
 			break;
 		else
@@ -52,9 +48,15 @@ int main(){
 	return 0;
 }
 
-/* Function Implementation */
+/*
+*	Function: executeCommand
+*	--------------------
+*	executes all the commands based on the input read in main
+*	input: *command which contains the given command, and the list x
+*	that contains all of the tasks
+*	returns: nothing
+*/
 void executeCommand(char *command, List x){
-	/*char c;*/
 	if (!strcmp(command, "add")){
 		addItem(readItem(x),x);
 	}
@@ -66,13 +68,12 @@ void executeCommand(char *command, List x){
 	}
 	else if(!strcmp(command, "remove")){
 		removeItem(x);
-
 	}
 	else if(!strcmp(command, "path")){
 		path(x);
 	}
 	else{
 		printf("illegal arguments\n");
+		cleanBuffer();
 	}
-	/*while((c = getchar()) != '\n'); cleans buffer*/
 }

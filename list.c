@@ -1,6 +1,6 @@
 /************
 *************
-May 12th '18
+May 18th '18
 
 All Rights Reserved © Daniel Lopes
 
@@ -18,31 +18,57 @@ of FIFO ADTs
 
 #include "list.h"
 
+/*
+* Function: minLine
+* --------------------
+*  sweeps the vector and finds the lowest line
+*  input: *matrix (vector of type matrixElement),int inf_l, int sup_l
+*  returns: a line number
+*/
 void listInit(List x) {
 	x->head = NULL;
 	x->tail = NULL;
 }
 
+/*
+* Function: minLine
+* --------------------
+*  sweeps the vector and finds the lowest line
+*  input: *matrix (vector of type matrixElement),int inf_l, int sup_l
+*  returns: a line number
+*/
 int listEmpty(List x) { /*Checks if list is empty*/
 	return x->head == NULL;
 }
 
+/*
+* Function: minLine
+* --------------------
+*  sweeps the vector and finds the lowest line
+*  input: *matrix (vector of type matrixElement),int inf_l, int sup_l
+*  returns: a line number
+*/
 void deleteList(List x){ /*doesn't completely free the list on purpose*/
 	if(!listEmpty(x)){
-		link t = x->head->next, next;
-		while (t != NULL && t != x->tail){
+		link t = x->head, next;
+		while (t != NULL){
 			next = t->next;
 			free(t->item);
 			free(t);
 			t = next;
 		}
-		free(x->tail->item);
-		free(x->head->item);
 		x->head = NULL;
 		x->tail = NULL;
 	}
 }
 
+/*
+* Function: minLine
+* --------------------
+*  sweeps the vector and finds the lowest line
+*  input: *matrix (vector of type matrixElement),int inf_l, int sup_l
+*  returns: a line number
+*/
 void addNode(List x, void* item) {
 	if (listEmpty(x)) {
 		x->head = (x->tail = newNode(item, x->head));
@@ -52,6 +78,13 @@ void addNode(List x, void* item) {
 	x->tail = x->tail->next;
 }
 
+/*
+* Function: minLine
+* --------------------
+*  sweeps the vector and finds the lowest line
+*  input: *matrix (vector of type matrixElement),int inf_l, int sup_l
+*  returns: a line number
+*/
 link newNode(void* i, link next) {
 	link x = (link) malloc(sizeof(struct node));
 	x->item = i;
@@ -59,6 +92,13 @@ link newNode(void* i, link next) {
 	return x;
 }
 
+/*
+* Function: minLine
+* --------------------
+*  sweeps the vector and finds the lowest line
+*  input: *matrix (vector of type matrixElement),int inf_l, int sup_l
+*  returns: a line number
+*/
 void removeNode(List x, link node){
 	link i;
 	if (node == x->head){ /*If node is the first one, need to change head*/

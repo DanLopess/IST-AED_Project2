@@ -1,6 +1,6 @@
 /************
 *************
-May 8th '18
+May 18th '18
 
 All Rights Reserved © Daniel Lopes
 
@@ -14,6 +14,10 @@ and structures related to tasks
 #ifndef TASK_H
 #define TASK_H
 #define MAXDESCRIPTION 8000
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef unsigned long int Key;
 typedef struct list *List; /* *List is a struct list defined in list.h*/
@@ -31,11 +35,19 @@ void cleanBuffer();
 Item readItem(List x);
 void addItem(Item task, List x);
 void removeItem(List x);
+void removeDependency(List x, Key id);
 void printItem(Item t);
 void duration(List x);
 void depend(List x);
-void path(List x);
 int nonExistant(List x, Key id);
 void deleteAllTasks(List x);
+
+/*Path*/
+void path(List x);
+void calculateEarlyStart(List x);
+void calculateLateStart(List x);
+void printCriticalPath(List x);
+Key highestEarlyFinish(List a);
+int isDependency(List x, Key id);
 
 #endif
