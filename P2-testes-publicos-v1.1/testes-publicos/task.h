@@ -47,7 +47,7 @@ void path(List x);
 void calculateEarlyStart(List x);
 void calculateLateStart(List x);
 void printCriticalPath(List x);
-Key highestEarlyFinish(List a);
-int isDependency(List x, Key id);*/
+Key highestEarlyFinish(List a);*/
+int isDependency(List x, Key id);
 
 #endif

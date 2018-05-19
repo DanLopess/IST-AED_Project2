@@ -133,22 +133,21 @@ void removeItem(List x){
 	Key id;
 	int nodeRemoved=0;
 
-	if(scanf("%lu*['\n']", &id)==1 && id > 0){
+	if(scanf("%lu*['\n']", &id)==1 && id > 0){ /*check task with dependencies*/
 		if(!nonExistant(x,id)){
-			for (i = x->head; i != NULL; i = i->next){
-				if(((Item)i->item)->id == id){ /* item is void* so it needs to be casted*/
-					if(listEmpty(((Item)i->item)->dependencies)){ /*If it has zero dependencies*/
+			if(isDependency(x,id)){
+				printf("task with dependencies\n");
+				nodeRemoved = 1;
+			}
+			else{
+				for(i = x->head; i != NULL; i = i->next)
+					if(((Item)i->item)->id == id){
 						removeNode(x,i);
 						removeDependency(x,id);
 						nodeRemoved = 1;
 						criticalPathCalculated = 0;
 						break;
 					}
-					else{
-						printf("task with dependencies\n");
-						nodeRemoved = 1;
-					}
-				}
 			}
 			if (!nodeRemoved)
 				printf("no such task\n");
@@ -289,4 +288,15 @@ void deleteAllTasks(List x){ /*Delete list of tasks*/
 	}
 	deleteList(x);
 	free(x);
+}
+
+int isDependency(List x, Key id){ /*sees if it is dependent on any task(find tarefa origem)*/
+	link i,f;
+	for(i = x->head; i != NULL; i = i->next){
+		for(f=((Item)i->item)->dependencies->head; f != NULL; f = f->next){
+			if(*(Key*)f->item == id)
+				return 1; /*it has dependencies*/
+		}
+	}
+	return 0; /*no dependencies found*/
 }

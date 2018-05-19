@@ -124,7 +124,7 @@ int nonExistant(List x, Key id){
 /*
 *	Function: removeItem
 *	--------------------
-*	reads a certain id a removes it from the list
+*	reads a certain id and removes it from the list
 *	input: List x which contains all of the tasks
 *	returns: nothing
 */

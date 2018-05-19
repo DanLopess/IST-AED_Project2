@@ -15,9 +15,6 @@ of the path function
 
 extern int criticalPathCalculated; /*Receives variable from main*/
 
-int isDependency(List x, Key id){ /*sees if it is dependent on any task(find tarefa origem)*/
-}
-
 void path(List x){ /*nao recalcular os elementos ja calculados*/
 	link i;
 	if(!listEmpty(x)){
