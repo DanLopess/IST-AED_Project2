@@ -72,7 +72,7 @@ void executeCommand(char *command, List x){
 		removeItem(x);
 	}
 	else if(!strcmp(command, "path")){
-		/*path(x);*/
+		path(x);
 	}
 	else{
 		printf("illegal arguments\n");

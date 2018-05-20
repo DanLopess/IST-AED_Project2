@@ -1,9 +1,7 @@
 /************
 *************
 May 18th '18
-
 All Rights Reserved © Daniel Lopes
-
 File: list.c
 Project: Tasks management
 *************
@@ -95,32 +93,48 @@ link newNode(void* i, link next) {
 /*
 *	Function: removeNode
 * --------------------
-*	removes a given node by freeing the memory stored in the pointer link
-*	input: a list of nodes and a given node
+*	removes a given id by freeing the memory stored in the pointer link
+* the fact that this function can remove nodes with type Item and nodes with
+*	type Key allows for a more efficient removal overall
+*	input: a list of nodes and a given id
 *	returns: nothing
 */
-void removeNode(List x, link node){
-	link i;
-	if (node == x->head && node != x->tail){ /*If node is the first one, need to change head*/
-		x->head = node->next;
-		free(node);
-	}
-	else if(node == x->tail && node == x->head){
-		listInit(x); /*puts head and tail as NULL*/
-		free(node);
-	}
-	else{
-		for (i = x->head; i != NULL; i = i->next)
-			if (i->next == node){
-				if(node == x->tail){ /*If node is the last one, need to change tail*/
-					i->next = NULL;
-					x->tail = i;
-				}
-				else{
-					i->next = node->next;
-				}
-				free(node);
-				break;
+void removeNode(List x, Key id, int control){
+	if(!listEmpty(x)){
+		link temp = x->head, prev;
+		if(control){ /*look for in global list control == 1*/
+			if (temp != NULL && ((Item)temp->item)->id == id){
+				if(x->head == x->tail) /*if only one element on the list*/
+					x->tail = temp->next;
+				x->head = temp->next;
+				free(temp);
+				return;
 			}
+			prev = temp;
+			while (temp != NULL && ((Item)temp->item)->id != id){
+				prev = temp;
+				temp = temp->next;
+			}
+		}
+		else{ /*look for in dependencies control == 0*/
+			if (temp != NULL && *((Key*)(Item)temp->item) == id){
+				if(x->head == x->tail) /*if only one element on the list*/
+					x->tail = temp->next;
+				x->head = temp->next;
+				free(temp);
+				return;
+			}
+			prev = temp;
+			while (temp != NULL && *((Key*)(Item)temp->item) != id){
+				prev = temp;
+				temp = temp->next;
+			}
+		}
+	/* If node was not present in linked list */
+	if (temp == NULL) return;
+	/* Unlink the node from linked list */
+
+	prev->next = temp->next;
+	free(temp);
 	}
 }

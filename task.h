@@ -39,10 +39,11 @@ void removeDependency(List x, Key id);
 void printItem(Item t);
 void duration(List x);
 void depend(List x);
-int nonExistant(List x, Key id);
 void deleteAllTasks(List x);
+
+int nonExistant(List x, Key id, int control);
 int isDependency(List x, Key id);
-link findNode(List x, Key id);
+link findNode(List x, Key id, int control); /*mainly used in path*/
 
 /*Path*/
 void path(List x);

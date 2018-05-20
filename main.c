@@ -8,12 +8,7 @@ File: main.c
 Project: Items management
 *************
 Known Bugs:
-- add done
-- duration done
-- depend done
-- remove not done
-- path not done
-
+- path doesn't work
 *************/
 
 #include <stdio.h>
@@ -23,7 +18,7 @@ Known Bugs:
 #include "task.h"
 
 /* Pre-processed constants and structures*/
-#define MAXSIZE 10 /*Size of Command which won't be bigger than 10 chars*/
+#define MAXSIZE 8 /*Size of Command which won't be bigger than 8 chars*/
 
 /* Function Declaration/Prototype */
 void executeCommand(char *command, List x);
@@ -38,7 +33,7 @@ int main(){
 	a = (List) malloc(sizeof(struct list)); /*Creates a List (head and tail)*/
 	listInit(a);
 
-	while(scanf("%10s*['\n']", command) == 1){
+	while(scanf("%8s*['\n']", command) == 1){
 		if(!strcmp(command,"exit")){
 			cleanBuffer();
 			break;
@@ -72,7 +67,7 @@ void executeCommand(char *command, List x){
 		removeItem(x);
 	}
 	else if(!strcmp(command, "path")){
-		path(x);
+		/*path(x); path isn't working*/
 	}
 	else{
 		printf("illegal arguments\n");

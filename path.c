@@ -4,12 +4,12 @@ May 18th '18
 
 All Rights Reserved © Daniel Lopes
 
-File: path.c.h
+File: path.c
 Project: Tasks management
 *************
 Description:
 This auxiliary file contains all the functions
-of the path function
+of the path calculation
 *************/
 #include "task.h"
 
@@ -18,7 +18,7 @@ extern int criticalPathCalculated; /*Receives variable from main*/
 void path(List x){
 	if(!listEmpty(x)){
 		Key duration;
-		calculateLateStart(x);
+		calculateEarlyStart(x);
 		calculateLateStart(x);
 		duration = highestEarlyFinish(x);
 		criticalPathCalculated = 1;
@@ -38,7 +38,7 @@ void calculateEarlyStart(List x){
 		else{
 			Key highestValue = 0;
 			for(f = ((Item)i->item)->dependencies->head; f!=NULL;f=f->next){
-				link tempNode = findNode(x,*(Key*)f->item); /*grabs the node that*/
+				link tempNode = findNode(x,*(Key*)f->item,0); /*grabs the node that*/
 				if((((Item)tempNode->item)->duration +			/*contains that id*/
 				((Item)tempNode->item)->early) > highestValue){
 					highestValue = ((Item)tempNode->item)->duration +
@@ -49,7 +49,7 @@ void calculateEarlyStart(List x){
 		}
 	}
 }
-void calculateLateStart(List x){
+void calculateLateStart(List x){ /*Cannot calculate late start*/
 	link i,f;
 	for(i = x->head; i != NULL; i=i->next){
 		if(!isDependency(x,((Item)i->item)->id)){ /*If it is a final task*/
@@ -60,6 +60,7 @@ void calculateLateStart(List x){
 		}
 	}
 }
+
 void printCriticalPath(List x){ /*prints tasks that have equal early and late*/
 	link i;
 	for(i = x->head; i != NULL; i = i->next){

@@ -35,7 +35,7 @@ void cleanBuffer(){
 *	input: List x which contains all of the tasks
 *	returns: an Item, i.e., the task that was read
 */
-Item readItem(List x){ /*Reads a certain task without dependencies*/
+Item readItem(List x){
 	long int id,duration; /*allows to decide if a negative number was read*/
 	Item task = (Item)malloc(sizeof(struct task));
 	if(scanf("%ld \"%8001[^\"]\"%ld*['\n']",&id,task->description,&duration) != 3){
@@ -45,7 +45,7 @@ Item readItem(List x){ /*Reads a certain task without dependencies*/
 		return NULL;
 	}
 	else{
-		if(!nonExistant(x,id)){
+		if(!nonExistant(x,id,0)){
 			printf("id already exists\n");
 			cleanBuffer();
 			free(task);
@@ -82,7 +82,7 @@ void addItem(Item task, List x){
 		listInit(task->dependencies);
 		while(scanf("%lu", &readId) == 1 && readId > 0){
 			readDependency = 1;
-			if(nonExistant(x,readId)){
+			if(nonExistant(x,readId,0)){
 				printf("no such task\n");
 				deleteList(task->dependencies);
 				free(task->dependencies);
@@ -109,16 +109,24 @@ void addItem(Item task, List x){
 *	Function: nonExistant
 *	--------------------
 *	checks if an id exists in a certain list
-*	input: List x which contains all of the tasks and an id
+*	input: List x which contains all of the tasks,an id and a control variable
 *	returns: an integer, either 0 (exists) or 1 (doesnt exist)
 */
-int nonExistant(List x, Key id){
+int nonExistant(List x, Key id, int control){
 	link i;
 
-	for(i = x->head; i != NULL; i = i->next)
-		if(((Item)i->item)->id == id)
-			return 0; /*existant*/
-	return 1; /*nonexistant*/
+	if(!control){ /*control == 0, searches in global list*/
+		for(i = x->head; i != NULL; i = i->next)
+			if(((Item)i->item)->id == id)
+				return 0; /*existant*/
+		return 1; /*nonexistant*/
+	}
+	else{ /*control == 1, searches in dependencies list*/
+		for(i = x->head; i != NULL; i = i->next)
+			if(*((Key*)i->item) == id)
+				return 0; /*existant*/
+		return 1; /*nonexistant*/
+	}
 }
 
 /*
@@ -129,25 +137,20 @@ int nonExistant(List x, Key id){
 *	returns: nothing
 */
 void removeItem(List x){
-	link i;
 	Key id;
 	int nodeRemoved=0;
 
 	if(scanf("%lu*['\n']", &id)==1 && id > 0){ /*check task with dependencies*/
-		if(!nonExistant(x,id)){
+		if(!nonExistant(x,id,0)){
 			if(isDependency(x,id)){
 				printf("task with dependencies\n");
 				nodeRemoved = 1;
 			}
 			else{
-				for(i = x->head; i != NULL; i = i->next)
-					if(((Item)i->item)->id == id){
-						removeNode(x,i);
-						removeDependency(x,id);
-						nodeRemoved = 1;
-						criticalPathCalculated = 0;
-						break;
-					}
+				removeNode(x,id,1);
+				removeDependency(x,id);
+				nodeRemoved = 1;
+				criticalPathCalculated = 0;
 			}
 			if (!nodeRemoved)
 				printf("no such task\n");
@@ -163,14 +166,14 @@ void removeItem(List x){
 /*
 *	Function: removeDependency
 *	--------------------
-*	receives a list and an id and removes that id from all dependencies
+*	receives a list and an id and removes that id from all dependencies and sucessors
 *	input: List x which contains all of the tasks and an id
 *	returns: nothing
 */
 void removeDependency(List x, Key id){ /*removes from all lists of dependencies*/
 	link i;
 	for(i = x->head; i!=NULL; i=i->next){
-		removeNode(((Item)i->item)->dependencies,findNode(((Item)i->item)->dependencies,id));
+		removeNode(((Item)i->item)->dependencies,id,0);
 	}
 }
 
@@ -193,16 +196,7 @@ void printItem(Item t){
 	printf("\n");
 	}
 	else{
-		printf("%ld \"%s\" %ld",t->id, t->description, t->duration);
-		if(t->early == t->late)
-			printf(" [%lu CRITICAL]",t->early);
-		else
-			printf(" [%lu %lu]",t->early,t->late);
-		if(!listEmpty(t->dependencies))
-			for(i = t->dependencies->head; i != NULL; i = i->next){
-				printf(" %lu", *((Key*)i->item));
-			}
-		printf("\n");
+		/*print with early and late*/
 	}
 }
 
@@ -250,7 +244,7 @@ void depend(List x){
 	if (scanf("%lu*[^'\n']", &id) == 1 && id > 0){
 		link i,f;
 		int foundDependency = 0;
-		if(!nonExistant(x,id)){
+		if(!nonExistant(x,id,0)){
 			printf("%lu:",id);
 			for(i = x->head; i != NULL; i = i->next){
 				if(!listEmpty(((Item)i->item)->dependencies))
@@ -297,7 +291,14 @@ void deleteAllTasks(List x){ /*Delete list of tasks*/
 	free(x);
 }
 
-int isDependency(List x, Key id){ /*sees if it is dependent on any task(find tarefa origem)*/
+/*
+*	Function: isDependency
+*	--------------------
+*	sweeps the list and returns 1 if this id is a dependency of any task and 0 otherwise
+*	input: List x which contains all of the tasks and an Id
+*	returns: 0 or 1
+*/
+int isDependency(List x, Key id){ /*sees if it is dependent on any task*/
 	link i,f;
 	for(i = x->head; i != NULL; i = i->next){
 		for(f=((Item)i->item)->dependencies->head; f != NULL; f = f->next){
@@ -308,10 +309,26 @@ int isDependency(List x, Key id){ /*sees if it is dependent on any task(find tar
 	return 0; /*no dependencies found*/
 }
 
-link findNode(List x, Key id){
+/*
+*	Function: isDependency
+*	--------------------
+*	sweeps the list and returns 1 if this id is a dependency of any task and 0 otherwise
+*	input: List x which contains all of the tasks, an Id and a control variable
+*	returns: 0 or 1
+*/
+link findNode(List x, Key id, int control){
 	link i;
-	for (i = x->head; i!= NULL; i=i->next)
-		if(((Item)i->item)->id == id)
-			return i;
+	if(!listEmpty(x)){
+		if(!control){ /*control == 0, searches in global list*/
+			for(i = x->head; i != NULL; i = i->next)
+				if(((Item)i->item)->id == id)
+					return i;
+		}
+		else{ /*control == 1, searches in dependencies list*/
+			for(i = x->head; i != NULL; i = i->next)
+				if(*((Key*)i->item) == id)
+					return i;
+		}
+	}
 	return NULL;
 }

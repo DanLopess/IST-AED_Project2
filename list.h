@@ -27,6 +27,6 @@ int listEmpty(List x);
 void deleteList(List x);
 link newNode(void*  i, link next);
 void addNode(List x, void* item);
-void removeNode(List x, link node);
+void removeNode(List x, Key id, int control);
 
 #endif

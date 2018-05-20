@@ -124,7 +124,7 @@ int nonExistant(List x, Key id){
 /*
 *	Function: removeItem
 *	--------------------
-*	reads a certain id a removes it from the list
+*	reads a certain id and removes it from the list
 *	input: List x which contains all of the tasks
 *	returns: nothing
 */
@@ -163,7 +163,7 @@ void removeItem(List x){
 /*
 *	Function: removeDependency
 *	--------------------
-*	receives a list and an id and removes that id from all dependencies
+*	receives a list and an id and removes that id from all dependencies and sucessors
 *	input: List x which contains all of the tasks and an id
 *	returns: nothing
 */
@@ -195,7 +195,16 @@ void printItem(Item t){
 	printf("\n");
 	}
 	else{
-		/*print with early and late*/
+		printf("%ld \"%s\" %ld",t->id, t->description, t->duration);
+		if(t->early == t->late)
+			printf(" [%lu CRITICAL]",t->early);
+		else
+			printf(" [%lu %lu]",t->early,t->late);
+		if(!listEmpty(t->dependencies))
+			for(i = t->dependencies->head; i != NULL; i = i->next){
+				printf(" %lu", *((Key*)i->item));
+			}
+		printf("\n");
 	}
 }
 
@@ -290,13 +299,37 @@ void deleteAllTasks(List x){ /*Delete list of tasks*/
 	free(x);
 }
 
-int isDependency(List x, Key id){ /*sees if it is dependent on any task(find tarefa origem)*/
+/*
+*	Function: isDependency
+*	--------------------
+*	sweeps the list and returns 1 if this id is a dependency of any task and 0 otherwise
+*	input: List x which contains all of the tasks and an Id
+*	returns: 0 or 1
+*/
+int isDependency(List x, Key id){ /*sees if it is dependent on any task*/
 	link i,f;
 	for(i = x->head; i != NULL; i = i->next){
 		for(f=((Item)i->item)->dependencies->head; f != NULL; f = f->next){
 			if(*(Key*)f->item == id)
-				return 1; /*it has dependencies*/
+				return 1; /*it is dependency*/
 		}
 	}
-	return 0; /*no dependencies found*/
+	return 0; /*not a dependency*/
+}
+
+/*
+*	Function: isDependency
+*	--------------------
+*	sweeps the list and returns 1 if this id is a dependency of any task and 0 otherwise
+*	input: List x which contains all of the tasks and an Id
+*	returns: 0 or 1
+*/
+link findNode(List x, Key id){
+	link i;
+	if(!listEmpty(x)){
+		for (i = x->head; i!= NULL; i=i->next)
+			if(((Item)i->item)->id == id)
+				return i;
+	}
+	return NULL;
 }
