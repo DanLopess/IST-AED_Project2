@@ -168,11 +168,9 @@ void removeItem(List x){
 *	returns: nothing
 */
 void removeDependency(List x, Key id){ /*removes from all lists of dependencies*/
-	link i,f;
+	link i;
 	for(i = x->head; i!=NULL; i=i->next){
-		for(f = ((Item)i->item)->dependencies->head; f!=NULL; f=f->next)
-			if(*(((Key*)f->item)) == id)
-				removeNode(((Item)i->item)->dependencies,f);
+		removeNode(((Item)i->item)->dependencies,findNode(((Item)i->item)->dependencies,id));
 	}
 }
 
@@ -195,7 +193,16 @@ void printItem(Item t){
 	printf("\n");
 	}
 	else{
-		/*print with early and late*/
+		printf("%ld \"%s\" %ld",t->id, t->description, t->duration);
+		if(t->early == t->late)
+			printf(" [%lu CRITICAL]",t->early);
+		else
+			printf(" [%lu %lu]",t->early,t->late);
+		if(!listEmpty(t->dependencies))
+			for(i = t->dependencies->head; i != NULL; i = i->next){
+				printf(" %lu", *((Key*)i->item));
+			}
+		printf("\n");
 	}
 }
 
@@ -299,4 +306,12 @@ int isDependency(List x, Key id){ /*sees if it is dependent on any task(find tar
 		}
 	}
 	return 0; /*no dependencies found*/
+}
+
+link findNode(List x, Key id){
+	link i;
+	for (i = x->head; i!= NULL; i=i->next)
+		if(((Item)i->item)->id == id)
+			return i;
+	return NULL;
 }
