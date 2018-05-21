@@ -22,6 +22,8 @@ Known Bugs:
 
 /* Function Declaration/Prototype */
 void executeCommand(char *command, List x);
+void First(List x);
+void Second(List x);
 
 /*Global variables*/
 int criticalPathCalculated = 0; /*controls the status of the critical Path */
@@ -66,10 +68,46 @@ void executeCommand(char *command, List x){
 	else if(!strcmp(command, "remove")){
 		removeItem(x);
 	}
+	else if(!strcmp(command, "first")){
+		First(x);
+	}
+	else if(!strcmp(command, "second")){
+		Second(x);
+	}
 	else if(!strcmp(command, "path")){
 		/*path(x); path isn't working*/
 	}
 	else{
 		printf("illegal arguments\n");
+	}
+}
+
+void First(List x){
+	Key id;
+	link tempNode;
+	char description[MAXDESCRIPTION+1];
+	if(scanf("%lu \"%8001[^\"]\"",&id,description) == 2){
+		tempNode = findNode(x,id,0);
+		if(tempNode != NULL){
+			strcpy(((Item)tempNode->item)->description, description);
+		}
+		else{
+			printf("no such task");
+		}
+	}
+}
+void Second(List x){
+	link i;
+	printf("sources:");
+	for(i = x->head; i != NULL; i = i->next){
+		if(listEmpty(((Item)i->item)->dependencies)){
+			printf(" %lu", ((Item)i->item)->id);
+		}
+	}
+	printf("\nsinks:");
+	for(i = x->head; i != NULL; i = i->next){
+		if(!isDependency(x,((Item)i->item)->id)){
+			printf(" %lu", ((Item)i->item)->id);
+		}
 	}
 }
